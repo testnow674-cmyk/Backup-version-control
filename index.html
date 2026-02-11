@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>ENCS Backup Awareness Quiz</title>
+
+<style>
+body {
+    font-family: Arial;
+    text-align:center;
+    margin-top:50px;
+    background-color:#0f172a;
+    color:white;
+}
+
+h1{
+    color:#38bdf8;
+}
+
+button {
+    padding:12px;
+    margin:10px;
+    font-size:16px;
+    background-color:#1e293b;
+    color:white;
+    border:none;
+    border-radius:8px;
+    cursor:pointer;
+}
+
+button:hover{
+    background-color:#38bdf8;
+    color:black;
+}
+
+/* subtle backup link style */
+.backup-link{
+    color:#64748b;
+    font-size:12px;
+    text-decoration:none;
+    opacity:0.6;
+}
+
+.backup-link:hover{
+    opacity:1;
+    color:#22c55e;
+}
+
+#result {
+    margin-top:20px;
+    font-weight:bold;
+    font-size:20px;
+}
+</style>
+
+</head>
+
+<body>
+
+<h1>ENCS</h1>
+
+<h2>A critical production configuration change is scheduled.  
+Which approach BEST ensures safe recovery if something fails?</h2>
+
+<p>Select the best answer.</p>
+
+<div id="options">
+    <button onclick="checkAnswer('wrong')">Apply change immediately and monitor logs</button>
+    <button onclick="checkAnswer('wrong')">Restart services after modification</button>
+    <button onclick="checkAnswer('correct')">Create a restorable system state before implementation</button>
+    <button onclick="checkAnswer('wrong')">Increase server resources temporarily</button>
+</div>
+
+<br><br>
+
+<a href="#" class="backup-link" onclick="takeBackup()">backup</a>
+
+<div id="result"></div>
+
+<script>
+// load previous state from localStorage
+let backupTaken = localStorage.getItem('backupTaken') === 'true';
+let locked = localStorage.getItem('locked') === 'true';
+let firstAttemptDone = localStorage.getItem('firstAttemptDone') === 'true';
+
+// restore UI on page load
+window.onload = function(){
+    if(locked){
+        document.getElementById("result").innerHTML = localStorage.getItem('resultText') || "";
+        disableOptions();
+    }
+};
+
+function takeBackup() {
+    if(locked){
+        alert("Too late 🙂 action already taken.");
+        return;
+    }
+    backupTaken = true;
+    localStorage.setItem('backupTaken', 'true');
+    alert("Backup saved 🙂 Now unlimited retry allowed.");
+}
+
+function disableOptions(){
+    document.getElementById("options").style.pointerEvents = "none";
+}
+
+function checkAnswer(answer) {
+
+    if(locked){
+        return;
+    }
+
+    if(answer === 'correct'){
+        document.getElementById("result").innerHTML = "✅ Correct Answer!";
+        localStorage.setItem('resultText', "✅ Correct Answer!");
+        disableOptions();
+        locked = true;
+        localStorage.setItem('locked', 'true');
+        return;
+    }
+
+    if(answer === 'wrong'){
+
+        if(backupTaken){
+            document.getElementById("result").innerHTML = "❌ Wrong answer. Backup exists — Try again 🙂";
+            localStorage.setItem('resultText', "❌ Wrong answer. Backup exists — Try again 🙂");
+            return;
+        }
+
+        if(!firstAttemptDone){
+            document.getElementById("result").innerHTML = "❌ Wrong answer. No backup — Access locked!";
+            localStorage.setItem('resultText', "❌ Wrong answer. No backup — Access locked!");
+            disableOptions();
+            locked = true;
+            localStorage.setItem('locked', 'true');
+            firstAttemptDone = true;
+            localStorage.setItem('firstAttemptDone', 'true');
+        }
+
+    }
+
+}
+</script>
+
+</body>
+</html>
