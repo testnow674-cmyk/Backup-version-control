@@ -58,16 +58,16 @@ button:hover{
 
 <h1>ENCS</h1>
 
-<h2>A critical production configuration change is scheduled.  
-Which approach BEST ensures safe recovery if something fails?</h2>
+<h2>Unexpected behaviour appears after deploying a new configuration in production.  
+Which action MOST reduces risk while investigation is ongoing?</h2>
 
 <p>Select the best answer.</p>
 
 <div id="options">
-    <button onclick="checkAnswer('wrong')">Apply change immediately and monitor logs</button>
-    <button onclick="checkAnswer('wrong')">Restart services after modification</button>
-    <button onclick="checkAnswer('correct')">Create a restorable system state before implementation</button>
-    <button onclick="checkAnswer('wrong')">Increase server resources temporarily</button>
+    <button onclick="checkAnswer('wrong')">Apply incremental fixes to isolate the problem</button>
+    <button onclick="checkAnswer('wrong')">Pause additional changes until analysis is completed</button>
+    <button onclick="checkAnswer('correct')">Notify stakeholders about possible downtime</button>
+    <button onclick="checkAnswer('wrong')">Enable additional logging for visibility</button>
 </div>
 
 <br><br>
@@ -144,3 +144,4 @@ function checkAnswer(answer) {
 
 </body>
 </html>
+
